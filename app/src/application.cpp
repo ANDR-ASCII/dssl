@@ -4,18 +4,14 @@ namespace DSSL
 {
 
 Application::Application(int& argc, char** argv)
-	: QApplication(argc, argv)
+    : QApplication(argc, argv)
+    , m_mainWindow(new MainWindow)
 {
-	initialize();
-}
-
-Application::~Application()
-{
+    m_mainWindow->show();
 }
 
 void Application::initialize()
 {
-
 }
 
 }

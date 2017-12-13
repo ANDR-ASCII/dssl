@@ -75,6 +75,7 @@ include_directories(
 
 target_link_libraries(
 	${AppName}
+	${CalculationLibName}
 	Qt5::Widgets
 	Qt5::Network
 	Qt5::Svg

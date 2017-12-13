@@ -33,13 +33,16 @@
 // Qt
 //
 #include <QObject>
+#include <QThread>
 #include <QWidget>
 #include <QDialog>
 #include <QtWidgets/QMainWindow>
-#include <QStyledItemDelegate>
-#include <QApplication>
-
-using namespace std::chrono_literals;
-using std::size_t;
+#include <QtWidgets/QApplication>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QHBoxLayout>
+#include <QScreen>
+#include <QDesktopWidget>
+#include <QFrame>
 
 #define theApp static_cast<Application*>(Application::instance())

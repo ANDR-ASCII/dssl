@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.11)
 
 set(AppName app)
 set(GoogleTestLibName googletest/googletest)
+set(CalculationLibName calculation)
 project(${AppName})
 
 set(CMAKE_INSTALL_PREFIX)
@@ -39,3 +40,4 @@ ENDMACRO(add_msvc_precompiled_header)
 
 add_subdirectory(${AppName})
 add_subdirectory(${GoogleTestLibName})
+add_subdirectory(${CalculationLibName})
