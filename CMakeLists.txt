@@ -1,19 +1,10 @@
 cmake_minimum_required(VERSION 2.8.11)
 
-set(AppName seospider)
-set(CrawlerEngineLibName crawlerengine)
+set(AppName app)
 set(GoogleTestLibName googletest/googletest)
-set(CrawlerEngineLibTestsName crawlerenginetests)
-set(CommonLibName common)
-set(GumboLibName gumbo)
-set(SeoSpiderServiceApiDllName seospiderserviceapi)
-set(SeoSpiderServiceAppName seospiderservice)
 project(${AppName})
 
-set(CMAKE_INSTALL_PREFIX )
-
-set(GuiBinName ${AppName})
-set(LoggerBinName ${LoggerAppName})
+set(CMAKE_INSTALL_PREFIX)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -22,9 +13,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5 REQUIRED Widgets Network Svg WebEngineWidgets Xml XmlPatterns COMPONENTS)
-
-set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost REQUIRED system date_time COMPONENTS)
 
 MACRO(add_msvc_precompiled_header PrecompiledHeader PrecompiledSource SourcesVar)
   IF(MSVC)
@@ -49,11 +37,5 @@ MACRO(add_msvc_precompiled_header PrecompiledHeader PrecompiledSource SourcesVar
   ENDIF(MSVC)
 ENDMACRO(add_msvc_precompiled_header)
 
-add_subdirectory(${CrawlerEngineLibName})
-add_subdirectory(${CrawlerEngineLibTestsName})
-add_subdirectory(${GuiBinName})
-add_subdirectory(${GumboLibName})
-add_subdirectory(${SeoSpiderServiceApiDllName})
-add_subdirectory(${SeoSpiderServiceAppName})
-add_subdirectory(${CommonLibName})
+add_subdirectory(${AppName})
 add_subdirectory(${GoogleTestLibName})
