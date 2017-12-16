@@ -16,6 +16,7 @@
 #include <future>
 #include <chrono>
 #include <string>
+#include <sstream>
 #include <type_traits>
 #include <typeinfo>
 #include <atomic>
@@ -25,3 +26,11 @@
 #include <functional>
 #include <optional>
 #include <csignal>
+
+#include <windows.h>
+
+#include "common_macro_helpers.h"
+
+#if __cplusplus >= 201703L
+#define HAS_CPP17
+#endif

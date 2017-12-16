@@ -5,7 +5,7 @@ set(AppSourcesDir src)
 set(AppHeadersDir include)
 
 # deps headers
-set(CrawlerEngineLibHeadersDir ../crawlerengine/include)
+set(CalculationLibHeadersDir ../calculation/include)
 
 aux_source_directory(${AppSourcesDir} AppSourcesList)
 file(GLOB_RECURSE AppCppList "src/*.cpp")
@@ -70,6 +70,7 @@ endif()
 
 include_directories(
 	${AppHeadersDir}
+	${CalculationLibHeadersDir}
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -77,7 +78,4 @@ target_link_libraries(
 	${AppName}
 	${CalculationLibName}
 	Qt5::Widgets
-	Qt5::Network
-	Qt5::Svg
-	Qt5::WebEngineWidgets
 )

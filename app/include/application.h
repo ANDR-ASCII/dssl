@@ -15,9 +15,6 @@ public:
     Application(int& argc, char** argv);
 
 private:
-    void initialize();
-
-private:
     std::unique_ptr<MainWindow> m_mainWindow;
 };
 

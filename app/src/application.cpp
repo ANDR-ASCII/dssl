@@ -10,8 +10,4 @@ Application::Application(int& argc, char** argv)
     m_mainWindow->show();
 }
 
-void Application::initialize()
-{
-}
-
 }

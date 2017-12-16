@@ -40,9 +40,14 @@
 #include <QtWidgets/QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QGraphicsItem>
 #include <QHBoxLayout>
 #include <QScreen>
 #include <QDesktopWidget>
 #include <QFrame>
+#include <QMouseEvent>
+#include <QGraphicsSceneMouseEvent>
+
+#include "common_macro_helpers.h"
 
 #define theApp static_cast<Application*>(Application::instance())
