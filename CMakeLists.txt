@@ -13,7 +13,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt5 REQUIRED Widgets Network Svg WebEngineWidgets Xml XmlPatterns COMPONENTS)
+find_package(Qt5 REQUIRED Widgets OpenGL COMPONENTS)
 
 MACRO(add_msvc_precompiled_header PrecompiledHeader PrecompiledSource SourcesVar)
   IF(MSVC)

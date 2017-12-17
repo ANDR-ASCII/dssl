@@ -64,4 +64,14 @@ ObjectPlacementCalculator::~ObjectPlacementCalculator()
     stop();
 }
 
+void ObjectPlacementCalculator::removeObject(CircleData* object)
+{
+    std::lock_guard<std::mutex> locker(m_mutex);
+
+    auto newContainerEnd = std::remove_if(std::begin(m_objects), std::end(m_objects), 
+        [object](const auto& existingObject) { return existingObject.get() == object; });
+
+    m_objects.erase(newContainerEnd, std::end(m_objects));
+}
+
 }

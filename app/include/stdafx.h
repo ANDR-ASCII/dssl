@@ -47,6 +47,10 @@
 #include <QFrame>
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QMimeData>
+#include <QDrag>
+#include <QGLWidget>
+#include <QDateTime>
 
 #include "common_macro_helpers.h"
 

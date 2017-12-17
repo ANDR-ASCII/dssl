@@ -1,5 +1,15 @@
 #include "helpers.h"
 
+namespace
+{
+
+int randomInRange(int start, int end)
+{
+    return (qrand() % (end + 1 - start)) + start;
+}
+
+}
+
 namespace DSSL
 {
 
@@ -29,26 +39,10 @@ double Helpers::pixelsToPoints(int sizeInPixels, double dpi)
     return static_cast<double>(sizeInPixels) * 72.0 / dpi;
 }
 
-void Helpers::moveWidgetToHostCenter(QWidget* widget, QWidget* host)
+
+QColor Helpers::randomColor()
 {
-    if (!host)
-    {
-        host = widget->parentWidget();
-    }
-
-    if (host)
-    {
-        QRect hostRect = host->geometry();
-        widget->move(hostRect.center() - widget->rect().center());
-
-        return;
-    }
-
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    const int x = (screenGeometry.width() - widget->width()) / 2;
-    const int y = (screenGeometry.height() - widget->height()) / 2;
-
-    widget->move(x, y);
+    return QColor(randomInRange(0, 255), randomInRange(0, 255), randomInRange(0, 255));
 }
 
 }

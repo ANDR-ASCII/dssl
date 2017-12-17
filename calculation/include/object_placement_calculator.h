@@ -14,6 +14,8 @@ public:
 
     CircleData* addNewObject(int x, int y);
 
+    void removeObject(CircleData* object);
+
     void start();
 
     void stop();

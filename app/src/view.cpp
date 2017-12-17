@@ -9,9 +9,10 @@ View::View(QWidget* parent)
 {
     m_graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
     m_graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
-    m_graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    m_graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
     m_graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     m_graphicsView->setRenderHint(QPainter::Antialiasing, true);
+    m_graphicsView->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
 
     QVBoxLayout* layout = new QVBoxLayout(this);
 

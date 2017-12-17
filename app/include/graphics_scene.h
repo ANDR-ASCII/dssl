@@ -8,20 +8,25 @@ class GraphicsScene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    using QGraphicsScene::QGraphicsScene;
+    GraphicsScene(QObject* parent = nullptr);
+
+    GraphicsScene(const QRectF& sceneRect, QObject* parent = nullptr);
+
+    GraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject* parent = nullptr);
 
 protected:
-    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent* event) override;
-
-    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent* event) override;
-
-    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent* event) override;
-
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
 
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+
+    virtual void timerEvent(QTimerEvent* event) override;
+
+private:
+    QGraphicsItem* m_aquiredItem;
+
+    int m_timeId;
 };
 
 }

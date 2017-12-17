@@ -3,7 +3,7 @@
 namespace
 {
 
-constexpr std::size_t s_radius = 10;
+constexpr std::size_t s_radius = 20;
 
 }
 

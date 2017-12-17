@@ -10,19 +10,28 @@ class CircleData;
 namespace DSSL
 {
 
-class GraphicsCircleItem : public QGraphicsEllipseItem
+class GraphicsCircleItem : public QGraphicsItem
 {
 public:
-    GraphicsCircleItem(QGraphicsItem* parent = nullptr);
+    GraphicsCircleItem(const QPointF& position, QGraphicsItem* parent = nullptr);
 
-    GraphicsCircleItem(const QRectF& rect, QGraphicsItem* parent = nullptr);
+    ~GraphicsCircleItem();
 
-    GraphicsCircleItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem* parent = nullptr);
+    Calculation::CircleData* associatedData() const noexcept;
 
-    const Calculation::CircleData* associatedData() const noexcept;
+    virtual QPainterPath shape() const override;
+
+    virtual QRectF boundingRect() const override;
+
+protected:
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:
     Calculation::CircleData* m_associatedData;
+
+    QColor m_color;
+
+    QColor m_borderColor;
 };
 
 }

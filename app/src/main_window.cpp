@@ -15,9 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(tr("DSSL Example"));
 
-    const QSize minimumSize(Helpers::pointsToPixels(400), Helpers::pointsToPixels(200));
+    const QSize minMaxSize(Helpers::pointsToPixels(600), Helpers::pointsToPixels(600));
 
-    setMinimumSize(minimumSize);
+    setMinimumSize(minMaxSize);
+    setMaximumSize(minMaxSize);
 
     View* view = new View;
 

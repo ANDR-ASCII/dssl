@@ -7,15 +7,17 @@ class Helpers
 {
 public:
     static int pointsToPixels(double sizeInPoints, double dpi = 0);
+    
     static double pixelsToPoints(int sizeInPixels, double dpi = 0);
-    static void moveWidgetToHostCenter(QWidget* widget, QWidget* host = nullptr);
+    
+    static QColor randomColor();
 
     template <typename DestinationType, typename SourceType>
     static DestinationType fast_cast(SourceType* p)
     {
         if constexpr(std::is_pointer<DestinationType>::value)
         {
-            assert(dynamic_cast<DestinationType>(p));
+            DEBUG_ASSERT(dynamic_cast<DestinationType>(p));
             return static_cast<DestinationType>(p);
         }
         else
@@ -36,7 +38,7 @@ public:
             }
             catch (...)
             {
-                assert(!"Actual type differs from DestinationType");
+                DEBUG_ASSERT(!"Actual type differs from DestinationType");
             }
     #endif
 
