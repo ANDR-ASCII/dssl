@@ -59,6 +59,9 @@ void ObjectPlacementCalculator::calculateCycle()
 
     while (m_needToCalculate.load())
     {
+        //
+        // std::lock_guard here will lead to livelock if we add the circle
+        //
         while(!m_mutex.try_lock());
 
         for (std::unique_ptr<CircleData>& object : m_objects)
@@ -74,7 +77,7 @@ void ObjectPlacementCalculator::calculateCycle()
 
                 const double distanceValue = distance(relativeObjectCoords, objectCoords);
 
-                const double forceValue = distanceValue <= CircleData::radius() * 2 ? 0 : force(distanceValue);
+                const double forceValue = distanceValue <= CircleData::radius() * 2 ? 0 : force(distanceValue) / 10;
 
                 Point deltaPoint = relativeObjectCoords - objectCoords;
 
