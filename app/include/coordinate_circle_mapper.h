@@ -24,8 +24,6 @@ class CoordinateCircleMapper
 public:
     CoordinateCircleMapper(GraphicsCircleItem* item, Calculation::CircleData* associatedData);
 
-    ~CoordinateCircleMapper();
-
     Calculation::CircleData* associatedData() const noexcept;
 
     virtual void onAboutNotifyObjectChanged() override;
@@ -37,7 +35,7 @@ private slots:
     void initialize();
 
 private:
-    GraphicsCircleItem* m_item;
+    QPointer<GraphicsCircleItem> m_item;
 
     Calculation::CircleData* m_associatedData;
 };

@@ -14,11 +14,6 @@ CoordinateCircleMapper::CoordinateCircleMapper(GraphicsCircleItem* item, Calcula
     VERIFY(QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection));
 }
 
-CoordinateCircleMapper::~CoordinateCircleMapper()
-{
-    m_associatedData->detachObserver(shared_from_this());
-}
-
 Calculation::CircleData* CoordinateCircleMapper::associatedData() const noexcept
 {
     return m_associatedData;
@@ -26,6 +21,15 @@ Calculation::CircleData* CoordinateCircleMapper::associatedData() const noexcept
 
 void CoordinateCircleMapper::onAboutNotifyObjectChanged()
 {
+    if (!m_item)
+    {
+        return;
+    }
+
+    //
+    // TODO: At this stage m_item can be null
+    //
+
     VERIFY(QMetaObject::invokeMethod(m_item, "onAboutCoordinatesChanged", Qt::QueuedConnection));
 }
 

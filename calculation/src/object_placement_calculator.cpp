@@ -59,12 +59,10 @@ void ObjectPlacementCalculator::calculateCycle()
 
     while (m_needToCalculate.load())
     {
-        std::lock_guard<std::mutex> locker(m_mutex);
+        while(!m_mutex.try_lock());
 
         for (std::unique_ptr<CircleData>& object : m_objects)
         {
-            const auto startTime = std::chrono::system_clock::now();
-
             Point objectCoords{ static_cast<double>(object->x()), static_cast<double>(object->y()) };
 
             double accelerationByX = 0.0;
@@ -86,8 +84,7 @@ void ObjectPlacementCalculator::calculateCycle()
                 accelerationByY += forceValue * std::sin(alpha);
             }
 
-            const auto endTime = std::chrono::system_clock::now();
-            const auto timeDifference = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+            const auto timeDifference = 1000 / 60;
 
             const int newXCoord = static_cast<int>(object->x() + object->velocityByX() * timeDifference + accelerationByX * std::pow(timeDifference, 2) / 2);
             const int newYCoord = static_cast<int>(object->y() + object->velocityByY() * timeDifference + accelerationByY * std::pow(timeDifference, 2) / 2);
@@ -99,7 +96,9 @@ void ObjectPlacementCalculator::calculateCycle()
             object->setVelocityByY(object->velocityByY() + accelerationByY * timeDifference);
         }
 
-        std::this_thread::sleep_for(50ms);
+        m_mutex.unlock();
+
+        std::this_thread::sleep_for(30ms);
     }
 }
 

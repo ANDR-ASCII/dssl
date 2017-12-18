@@ -52,6 +52,7 @@
 #include <QGLWidget>
 #include <QDateTime>
 #include <QPushButton>
+#include <QPointer>
 
 #include "common_macro_helpers.h"
 
