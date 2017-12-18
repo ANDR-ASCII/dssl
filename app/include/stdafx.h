@@ -51,6 +51,7 @@
 #include <QDrag>
 #include <QGLWidget>
 #include <QDateTime>
+#include <QPushButton>
 
 #include "common_macro_helpers.h"
 

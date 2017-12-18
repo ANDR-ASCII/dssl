@@ -10,24 +10,26 @@ class CircleData;
 namespace DSSL
 {
 
-class GraphicsCircleItem : public QGraphicsItem
+class CoordinateCircleMapper;
+
+class GraphicsCircleItem : public QObject, public QGraphicsItem
 {
+    Q_OBJECT
+
 public:
     GraphicsCircleItem(const QPointF& position, QGraphicsItem* parent = nullptr);
-
-    ~GraphicsCircleItem();
-
-    Calculation::CircleData* associatedData() const noexcept;
 
     virtual QPainterPath shape() const override;
 
     virtual QRectF boundingRect() const override;
 
+    Q_INVOKABLE void onAboutCoordinatesChanged();
+
 protected:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 private:
-    Calculation::CircleData* m_associatedData;
+    std::shared_ptr<CoordinateCircleMapper> m_dataMapper;
 
     QColor m_color;
 

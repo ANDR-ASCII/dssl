@@ -1,9 +1,11 @@
 #pragma once
 
+#include "abstract_compound_observable.h"
+
 namespace Calculation
 {
 
-class CircleData
+class CircleData : public AbstractCompoundObservable
 {
 public:
     CircleData(int x, int y);
@@ -16,10 +18,20 @@ public:
     int y() const noexcept;
     void setY(int value) noexcept;
 
-private:
-    std::atomic_int m_x;
+    double velocityByX() const noexcept;
+    void setVelocityByX(double value) noexcept;
 
-    std::atomic_int m_y;
+    double velocityByY() const noexcept;
+    void setVelocityByY(double value) noexcept;
+
+private:
+    std::atomic<int> m_x;
+
+    std::atomic<int> m_y;
+
+    std::atomic<double> m_velocityByX;
+
+    std::atomic<double> m_velocityByY;
 };
 
 }

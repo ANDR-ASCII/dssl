@@ -2,6 +2,7 @@
 #include "circle_data.h"
 #include "object_placement_calculator.h"
 #include "helpers.h"
+#include "coordinate_circle_mapper.h"
 
 namespace DSSL
 {
@@ -15,17 +16,7 @@ GraphicsCircleItem::GraphicsCircleItem(const QPointF& position, QGraphicsItem* p
 
     Calculation::ObjectPlacementCalculator& objectPlacementCalculator = Calculation::ObjectPlacementCalculator::instance();
 
-    m_associatedData = objectPlacementCalculator.addNewObject(position.x(), position.y());
-}
-
-GraphicsCircleItem::~GraphicsCircleItem()
-{
-    Calculation::ObjectPlacementCalculator::instance().removeObject(m_associatedData);
-}
-
-Calculation::CircleData* GraphicsCircleItem::associatedData() const noexcept
-{
-    return m_associatedData;
+    m_dataMapper = std::make_shared<CoordinateCircleMapper>(this, objectPlacementCalculator.addNewObject(position.x(), position.y()));
 }
 
 QPainterPath GraphicsCircleItem::shape() const
@@ -44,12 +35,21 @@ QRectF GraphicsCircleItem::boundingRect() const
     return QRectF(-radius, -radius, 2 * radius, 2 * radius);
 }
 
+void GraphicsCircleItem::onAboutCoordinatesChanged()
+{
+    setX(m_dataMapper->associatedData()->x());
+
+    setY(m_dataMapper->associatedData()->y());
+}
+
 void GraphicsCircleItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     const int radius = static_cast<int>(Calculation::CircleData::radius());
 
     painter->setPen(m_borderColor);
+
     painter->setBrush(m_color);
+
     painter->drawEllipse(-radius, -radius, 2 * radius, 2 * radius);
 }
 

@@ -7,7 +7,7 @@ View::View(QWidget* parent)
     : QFrame(parent)
     , m_graphicsView(new QGraphicsView(this))
 {
-    m_graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+    m_graphicsView->setDragMode(QGraphicsView::NoDrag);
     m_graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
     m_graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
     m_graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
