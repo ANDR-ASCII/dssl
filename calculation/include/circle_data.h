@@ -10,7 +10,7 @@ class CircleData : public AbstractCompoundObservable
 public:
     CircleData(int x, int y);
 
-    static std::size_t radius() noexcept;
+    static int radius() noexcept;
 
     int x() const noexcept;
     void setX(int value) noexcept;

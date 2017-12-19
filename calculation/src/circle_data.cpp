@@ -3,7 +3,7 @@
 namespace
 {
 
-constexpr std::size_t s_radius = 20;
+constexpr int s_radius = 20;
 
 }
 
@@ -18,7 +18,7 @@ CircleData::CircleData(int x, int y)
 {
 }
 
-std::size_t CircleData::radius() noexcept
+int CircleData::radius() noexcept
 {
     return s_radius;
 }

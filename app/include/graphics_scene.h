@@ -7,12 +7,20 @@ class GraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool showItemInfo READ showItemInfo WRITE setShowItemInfo NOTIFY showItemInfoChanged);
+
 public:
     GraphicsScene(QObject* parent = nullptr);
 
     GraphicsScene(const QRectF& sceneRect, QObject* parent = nullptr);
 
     GraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject* parent = nullptr);
+
+	bool showItemInfo() const;
+
+	Q_SLOT void setShowItemInfo(bool value);
+
+    Q_SIGNAL void showItemInfoChanged(bool value);
 
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
@@ -27,6 +35,8 @@ private:
     QGraphicsItem* m_aquiredItem;
 
     int m_timeId;
+
+	bool m_showItemInfo;
 };
 
 }

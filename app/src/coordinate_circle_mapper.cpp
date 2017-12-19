@@ -9,9 +9,13 @@ CoordinateCircleMapper::CoordinateCircleMapper(GraphicsCircleItem* item, Calcula
     : m_item(item)
     , m_associatedData(associatedData)
 {
+    using namespace std::literals::chrono_literals;
+
     DEBUG_ASSERT(associatedData);
 
     VERIFY(QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection));
+
+    startTimer(21ms);
 }
 
 Calculation::CircleData* CoordinateCircleMapper::associatedData() const noexcept
@@ -21,16 +25,17 @@ Calculation::CircleData* CoordinateCircleMapper::associatedData() const noexcept
 
 void CoordinateCircleMapper::onAboutNotifyObjectChanged()
 {
-    if (!m_item)
+    ++m_updateNotificationCounter;
+}
+
+void CoordinateCircleMapper::timerEvent(QTimerEvent*)
+{
+    if (m_updateNotificationCounter.load() > 0)
     {
-        return;
+        VERIFY(QMetaObject::invokeMethod(m_item, "onAboutCoordinatesChanged", Qt::QueuedConnection));
+
+        --m_updateNotificationCounter;
     }
-
-    //
-    // TODO: At this stage m_item can be null
-    //
-
-    VERIFY(QMetaObject::invokeMethod(m_item, "onAboutCoordinatesChanged", Qt::QueuedConnection));
 }
 
 void CoordinateCircleMapper::initialize()

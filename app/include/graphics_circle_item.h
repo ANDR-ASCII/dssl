@@ -16,12 +16,20 @@ class GraphicsCircleItem : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool showDetailedInfo READ showDetailedInfo WRITE setShowDetailedInfo NOTIFY showDetailedInfoChanged);
+
 public:
     GraphicsCircleItem(const QPointF& position, QGraphicsItem* parent = nullptr);
 
     virtual QPainterPath shape() const override;
 
     virtual QRectF boundingRect() const override;
+
+    bool showDetailedInfo() const;
+
+    Q_SLOT void setShowDetailedInfo(bool value);
+
+	Q_SIGNAL void showDetailedInfoChanged(bool);
 
     Q_INVOKABLE void onAboutCoordinatesChanged();
 
@@ -34,6 +42,8 @@ private:
     QColor m_color;
 
     QColor m_borderColor;
+
+	bool m_showDetailedInfo;
 };
 
 }

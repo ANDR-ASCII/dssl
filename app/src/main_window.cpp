@@ -25,13 +25,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     QPushButton* startCalculationButton = new QPushButton(tr("Start Calculation"), this);
     QPushButton* stopCalculationButton = new QPushButton(tr("Stop Calculation"), this);
+    QPushButton* toggleShowingDetailedInfo = new QPushButton(tr("Enable/Disable Showing Detailed Info"), this);
 
     QHBoxLayout* buttonsLayout = new QHBoxLayout;
     buttonsLayout->addWidget(startCalculationButton);
     buttonsLayout->addWidget(stopCalculationButton);
+    buttonsLayout->addWidget(toggleShowingDetailedInfo);
 
     VERIFY(connect(startCalculationButton, &QPushButton::clicked, this, &MainWindow::onClickStartButton));
     VERIFY(connect(stopCalculationButton, &QPushButton::clicked, this, &MainWindow::onClickStopButton));
+    VERIFY(connect(toggleShowingDetailedInfo, &QPushButton::clicked, this, &MainWindow::onClickEnableDisableShowingDetailedInfo));
 
     layout->addLayout(buttonsLayout);
     layout->addWidget(view);
@@ -45,6 +48,11 @@ void MainWindow::onClickStartButton()
 void MainWindow::onClickStopButton()
 {
     Calculation::ObjectPlacementCalculator::instance().stop();
+}
+
+void MainWindow::onClickEnableDisableShowingDetailedInfo()
+{
+	m_scene->setShowItemInfo(!m_scene->showItemInfo());
 }
 
 }

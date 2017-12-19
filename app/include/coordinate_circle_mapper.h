@@ -31,6 +31,9 @@ public:
 signals:
     void coordinatesChanged();
 
+protected:
+    virtual void timerEvent(QTimerEvent* event) override;
+
 private slots:
     void initialize();
 
@@ -38,6 +41,8 @@ private:
     QPointer<GraphicsCircleItem> m_item;
 
     Calculation::CircleData* m_associatedData;
+
+    std::atomic<std::size_t> m_updateNotificationCounter;
 };
 
 }

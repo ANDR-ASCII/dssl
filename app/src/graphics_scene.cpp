@@ -15,6 +15,7 @@ GraphicsScene::GraphicsScene(const QRectF& sceneRect, QObject* parent)
     : QGraphicsScene(sceneRect, parent)
     , m_aquiredItem(nullptr)
     , m_timeId(0)
+    , m_showItemInfo(true)
 {
     m_timeId = startTimer(50);
     DEBUG_ASSERT(m_timeId);
@@ -25,14 +26,26 @@ GraphicsScene::GraphicsScene(qreal x, qreal y, qreal width, qreal height, QObjec
 {
 }
 
+bool GraphicsScene::showItemInfo() const
+{
+    return m_showItemInfo;
+}
+
+void GraphicsScene::setShowItemInfo(bool value)
+{
+    m_showItemInfo = value;
+
+    update();
+
+    emit showItemInfoChanged(m_showItemInfo);
+}
+
 void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     if (m_aquiredItem)
     {
-        GraphicsCircleItem* item = Helpers::fast_cast<GraphicsCircleItem*>(m_aquiredItem);
-
-        item->setX(event->scenePos().x());
-        item->setY(event->scenePos().y());
+        m_aquiredItem->setX(event->scenePos().x());
+        m_aquiredItem->setY(event->scenePos().y());
 
         return;
     }
@@ -89,7 +102,11 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
         event->scenePos().y() - Calculation::CircleData::radius() / 2
     );
 
-    QGraphicsItem* item = new GraphicsCircleItem(itemPosition);
+    GraphicsCircleItem* item = new GraphicsCircleItem(itemPosition);
+
+    item->setShowDetailedInfo(showItemInfo());
+
+    VERIFY(connect(this, SIGNAL(showItemInfoChanged(bool)), item, SLOT(setShowDetailedInfo(bool))));
 
     addItem(item);
 }

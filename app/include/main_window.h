@@ -3,6 +3,8 @@
 namespace DSSL
 {
 
+class GraphicsScene;
+
 class MainWindow : public QWidget
 {
     Q_OBJECT
@@ -13,9 +15,10 @@ public:
 private slots:
     void onClickStartButton();
     void onClickStopButton();
+    void onClickEnableDisableShowingDetailedInfo();
 
 private:
-    QGraphicsScene* m_scene;
+    GraphicsScene* m_scene;
 };
 
 }
