@@ -15,7 +15,7 @@ CoordinateCircleMapper::CoordinateCircleMapper(GraphicsCircleItem* item, Calcula
 
     VERIFY(QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection));
 
-    startTimer(21ms);
+    startTimer(21);
 }
 
 Calculation::CircleData* CoordinateCircleMapper::associatedData() const noexcept
