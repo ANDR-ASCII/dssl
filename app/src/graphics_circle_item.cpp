@@ -11,7 +11,7 @@ GraphicsCircleItem::GraphicsCircleItem(const QPointF& position, QGraphicsItem* p
     : QGraphicsItem(parent)
     , m_color(Helpers::randomColor())
     , m_borderColor(Helpers::randomColor())
-	, m_showDetailedInfo(true)
+    , m_showDetailedInfo(true)
 {
     setPos(position);
 

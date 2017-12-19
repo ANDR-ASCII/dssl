@@ -35,20 +35,12 @@ CircleData* ObjectPlacementCalculator::addNewObject(int x, int y)
 {
     std::lock_guard<std::mutex> locker(m_mutex);
 
-#ifdef HAS_CPP17
-
-    return m_objects.emplace_back(new CircleData(x, y)).get();
-
-#else
-
     m_objects.emplace_back(new CircleData(x, y));
 
     return m_objects.back().get();
-
-#endif
 }
 
-void ObjectPlacementCalculator::calculateCycle()
+void ObjectPlacementCalculator::calculateLoop()
 {
     using namespace std::literals::chrono_literals;
 
@@ -57,7 +49,7 @@ void ObjectPlacementCalculator::calculateCycle()
         return 1 / distance - 1 / std::pow(distance, 2);
     };
 
-    while (m_needToCalculate.load())
+    while (m_needToCalculate.load() && canContinueCalculate())
     {
         //
         // std::lock_guard here will lead to livelock if we add the circle
@@ -101,11 +93,13 @@ void ObjectPlacementCalculator::calculateCycle()
 
         m_mutex.unlock();
 
-        std::this_thread::sleep_for(30ms);
+        std::this_thread::sleep_for(50ms);
     }
+
+    m_needToCalculate.store(false);
 }
 
-void ObjectPlacementCalculator::start()
+void ObjectPlacementCalculator::start() noexcept
 {
     if (m_needToCalculate.load())
     {
@@ -114,10 +108,10 @@ void ObjectPlacementCalculator::start()
 
     m_needToCalculate.store(true);
 
-    m_calculateThread = std::thread(&ObjectPlacementCalculator::calculateCycle, this);
+    m_calculateThread = std::thread(&ObjectPlacementCalculator::calculateLoop, this);
 }
 
-void ObjectPlacementCalculator::stop()
+void ObjectPlacementCalculator::stop() noexcept
 {
     m_needToCalculate.store(false);
 
@@ -127,6 +121,16 @@ void ObjectPlacementCalculator::stop()
     }
 
     m_calculateThread.join();
+}
+
+bool ObjectPlacementCalculator::isRunning() const noexcept
+{
+    return m_needToCalculate.load() && m_calculateThread.get_id() != std::thread::id();
+}
+
+bool ObjectPlacementCalculator::canContinueCalculate() noexcept
+{
+    return true;
 }
 
 ObjectPlacementCalculator::ObjectPlacementCalculator()

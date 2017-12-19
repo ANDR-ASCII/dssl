@@ -5,7 +5,7 @@
 namespace Calculation
 {
 
-class ObjectPlacementCalculator final
+class ObjectPlacementCalculator
 {
 public:
     static ObjectPlacementCalculator& instance();
@@ -16,14 +16,19 @@ public:
 
     void removeObject(CircleData* object);
 
-    void start();
+    void start() noexcept;
 
-    void stop();
+    void stop() noexcept;
 
-private:
+    bool isRunning() const noexcept;
+
+protected:
     ObjectPlacementCalculator();
 
-    void calculateCycle();
+    virtual bool canContinueCalculate() noexcept;
+
+private:
+    void calculateLoop();
 
 private:
     std::vector<std::unique_ptr<CircleData>> m_objects;

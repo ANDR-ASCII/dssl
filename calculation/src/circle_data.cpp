@@ -10,11 +10,19 @@ constexpr int s_radius = 20;
 namespace Calculation
 {
 
-CircleData::CircleData(int x, int y)
+CircleData::CircleData(int x, int y) noexcept
     : m_x(x)
     , m_y(y)
     , m_velocityByX(0)
     , m_velocityByY(0)
+{
+}
+
+CircleData::CircleData(const CircleData& other) noexcept
+    : m_x(other.m_x.load())
+    , m_y(other.m_y.load())
+    , m_velocityByX(other.m_velocityByX.load())
+    , m_velocityByY(other.m_velocityByY.load())
 {
 }
 
@@ -69,6 +77,30 @@ void CircleData::setVelocityByY(double value) noexcept
     m_velocityByY.store(value);
 
     notifyObjectChanged();
+}
+
+std::ostream& operator<<(std::ostream& out, const CircleData& circleData)
+{
+    out << "x: " << circleData.x() << std::endl;
+    out << "y: " << circleData.y() << std::endl;
+    out << "vx: " << circleData.velocityByX() << std::endl;
+    out << "vy: " << circleData.velocityByY() << std::endl;
+
+    return out;
+}
+
+bool operator==(const CircleData& lhs, const CircleData& rhs) noexcept
+{
+    const auto doubleComparison = [](double d1, double d2)
+    {
+        return std::fabs(d1 - d2) <= std::numeric_limits<double>::epsilon();
+    };
+
+    return
+        lhs.x() == rhs.x() &&
+        lhs.y() == rhs.y() &&
+        doubleComparison(lhs.velocityByX(), rhs.velocityByX()) &&
+        doubleComparison(lhs.velocityByY(), rhs.velocityByY());
 }
 
 }

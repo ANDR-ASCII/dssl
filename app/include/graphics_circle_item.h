@@ -29,7 +29,7 @@ public:
 
     Q_SLOT void setShowDetailedInfo(bool value);
 
-	Q_SIGNAL void showDetailedInfoChanged(bool);
+    Q_SIGNAL void showDetailedInfoChanged(bool);
 
     Q_INVOKABLE void onAboutCoordinatesChanged();
 
@@ -43,7 +43,7 @@ private:
 
     QColor m_borderColor;
 
-	bool m_showDetailedInfo;
+    bool m_showDetailedInfo;
 };
 
 }

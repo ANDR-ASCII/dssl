@@ -30,7 +30,3 @@
 #include <windows.h>
 
 #include "common_macro_helpers.h"
-
-#if __cplusplus >= 201703L
-#define HAS_CPP17
-#endif

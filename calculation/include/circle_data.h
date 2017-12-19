@@ -8,7 +8,9 @@ namespace Calculation
 class CircleData : public AbstractCompoundObservable
 {
 public:
-    CircleData(int x, int y);
+    CircleData(int x, int y) noexcept;
+
+    CircleData(const CircleData& other) noexcept;
 
     static int radius() noexcept;
 
@@ -23,6 +25,10 @@ public:
 
     double velocityByY() const noexcept;
     void setVelocityByY(double value) noexcept;
+
+    friend std::ostream& operator<<(std::ostream& out, const CircleData& circleData);
+
+    friend bool operator==(const CircleData& lhs, const CircleData& rhs) noexcept;
 
 private:
     std::atomic<int> m_x;
