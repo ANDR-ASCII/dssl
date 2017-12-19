@@ -44,13 +44,9 @@ if(MSVC)
 		${CalculationTests} 
 		PROPERTIES WIN32_EXECUTABLE YES
 		LINK_FLAGS "/ENTRY:mainCRTStartup"
+		LINK_FLAGS "/SUBSYSTEM:CONSOLE"
 	)
 
-#	set_target_properties(
-#		${CalculationTests}
-#		PROPERTIES COMPILE_FLAGS "/FI\"stdafx.h\""
-#		RUNTIME_OUTPUT_DIRECTORY "../seospider/"
-#	)
 endif()
 
 include_directories(
