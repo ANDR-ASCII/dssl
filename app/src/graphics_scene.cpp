@@ -43,58 +43,28 @@ void GraphicsScene::setShowItemInfo(bool value)
 
 void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (QGraphicsItem* existingItem = itemAt(event->scenePos(), QTransform()); existingItem)
+    QGraphicsItem* existingItem = itemAt(event->scenePos(), QTransform());
+
+    if (event->button() == Qt::RightButton)
     {
-        m_itemAquired = true;
-    }
+        if (existingItem)
+        {
+            removeItem(existingItem);
+        }
+        else
+        {
+            const QPointF itemPosition(
+                event->scenePos().x() - Calculation::CircleData::radius() / 2,
+                event->scenePos().y() - Calculation::CircleData::radius() / 2
+            );
 
-    QGraphicsScene::mousePressEvent(event);
-}
-
-void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
-{
-    if (m_itemAquired)
-    {
-        m_itemAquired = false;
-
-        return QGraphicsScene::mouseReleaseEvent(event);
-    }
-
-    const QPointF centerPosition = event->scenePos();
-    const QPointF leftRadiusPosition(centerPosition.x() - Calculation::CircleData::radius() / 2, centerPosition.y());
-    const QPointF topRadiusPosition(centerPosition.x(), centerPosition.y() - Calculation::CircleData::radius() / 2);
-    const QPointF rightRadiusPosition(centerPosition.x() + Calculation::CircleData::radius() / 2, centerPosition.y());
-    const QPointF bottomRadiusPosition(centerPosition.x(), centerPosition.y() + Calculation::CircleData::radius() / 2);
-
-    if (QGraphicsItem* existingItem = itemAt(centerPosition, QTransform()); existingItem)
-    {
-        removeItem(existingItem);
-
-        event->accept();
+            addCircle(itemPosition);
+        }
 
         return;
     }
 
-    //
-    // This is not the end of the correct solution of the problem
-    // But for simplicity I omit these nuances
-    //
-    if (itemAt(leftRadiusPosition, QTransform()) ||
-        itemAt(topRadiusPosition, QTransform()) ||
-        itemAt(rightRadiusPosition, QTransform()) ||
-        itemAt(bottomRadiusPosition, QTransform()))
-    {
-        return QGraphicsScene::mouseReleaseEvent(event);
-    }
-
-    const QPointF itemPosition(
-        event->scenePos().x() - Calculation::CircleData::radius() / 2,
-        event->scenePos().y() - Calculation::CircleData::radius() / 2
-    );
-
-    addCircle(itemPosition);
-
-    event->accept();
+    QGraphicsScene::mousePressEvent(event);
 }
 
 void GraphicsScene::timerEvent(QTimerEvent* event)
