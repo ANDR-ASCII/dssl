@@ -1,5 +1,7 @@
 #include "object_placement_calculator.h"
 
+using namespace std::literals::chrono_literals;
+
 namespace
 {
 
@@ -17,6 +19,25 @@ struct Point
     {
         return std::sqrt(std::pow(lhs.x - rhs.x, 2) + std::pow(lhs.y - rhs.y, 2));
     }
+};
+
+template <typename T>
+class SpinLockGuard final
+{
+public:
+    SpinLockGuard(T& ref)
+        : m_ref(ref)
+    {
+        while (!m_ref.try_lock());
+    }
+
+    ~SpinLockGuard()
+    {
+        m_ref.unlock();
+    }
+
+private:
+    T& m_ref;
 };
 
 }
@@ -42,20 +63,13 @@ CircleData* ObjectPlacementCalculator::addNewObject(int x, int y)
 
 void ObjectPlacementCalculator::calculateLoop()
 {
-    using namespace std::literals::chrono_literals;
-
     const auto force = [](const double distance)
     {
         return 1 / distance - 1 / std::pow(distance, 2);
     };
 
-    while (m_needToCalculate.load() && canContinueCalculate())
+    const auto calculateStep = [&]
     {
-        //
-        // std::lock_guard here will lead to livelock if we add the circle
-        //
-        while (!m_mutex.try_lock());
-
         for (std::unique_ptr<CircleData>& object : m_objects)
         {
             Point objectCoords{ static_cast<double>(object->x()), static_cast<double>(object->y()) };
@@ -90,8 +104,15 @@ void ObjectPlacementCalculator::calculateLoop()
             object->setVelocityByX(object->velocityByX() + accelerationByX * timeDifference);
             object->setVelocityByY(object->velocityByY() + accelerationByY * timeDifference);
         }
+    };
 
-        m_mutex.unlock();
+    while (m_needToCalculate.load() && canContinueCalculate())
+    {
+        {
+            std::lock_guard<std::mutex> locker(m_mutex);
+
+            calculateStep();
+        }
 
         std::this_thread::sleep_for(30ms);
     }
