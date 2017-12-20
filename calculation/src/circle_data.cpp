@@ -15,6 +15,7 @@ CircleData::CircleData(int x, int y) noexcept
     , m_y(y)
     , m_velocityByX(0)
     , m_velocityByY(0)
+    , m_calculationBlocked(false)
 {
 }
 
@@ -23,6 +24,7 @@ CircleData::CircleData(const CircleData& other) noexcept
     , m_y(other.m_y.load())
     , m_velocityByX(other.m_velocityByX.load())
     , m_velocityByY(other.m_velocityByY.load())
+    , m_calculationBlocked(other.m_calculationBlocked.load())
 {
 }
 
@@ -77,6 +79,16 @@ void CircleData::setVelocityByY(double value) noexcept
     m_velocityByY.store(value);
 
     notifyObjectChanged();
+}
+
+void CircleData::setCalculationBlocked(bool value) noexcept
+{
+    m_calculationBlocked.store(value);
+}
+
+bool CircleData::isCalculationBlocked() const noexcept
+{
+    return m_calculationBlocked.load();
 }
 
 std::ostream& operator<<(std::ostream& out, const CircleData& circleData)

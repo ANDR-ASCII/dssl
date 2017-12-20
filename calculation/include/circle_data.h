@@ -26,6 +26,9 @@ public:
     double velocityByY() const noexcept;
     void setVelocityByY(double value) noexcept;
 
+    void setCalculationBlocked(bool value) noexcept;
+    bool isCalculationBlocked() const noexcept;
+
     friend std::ostream& operator<<(std::ostream& out, const CircleData& circleData);
 
     friend bool operator==(const CircleData& lhs, const CircleData& rhs) noexcept;
@@ -38,6 +41,8 @@ private:
     std::atomic<double> m_velocityByX;
 
     std::atomic<double> m_velocityByY;
+
+    std::atomic<bool> m_calculationBlocked;
 };
 
 }

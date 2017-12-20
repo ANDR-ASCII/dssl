@@ -16,15 +16,13 @@ public:
 
     GraphicsScene(qreal x, qreal y, qreal width, qreal height, QObject* parent = nullptr);
 
-	bool showItemInfo() const;
+    bool showItemInfo() const;
 
-	Q_SLOT void setShowItemInfo(bool value);
+    Q_SLOT void setShowItemInfo(bool value);
 
     Q_SIGNAL void showItemInfoChanged(bool value);
 
 protected:
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
@@ -32,11 +30,14 @@ protected:
     virtual void timerEvent(QTimerEvent* event) override;
 
 private:
-    QGraphicsItem* m_aquiredItem;
+    void addCircle(const QPointF& position);
 
+private:
     int m_timeId;
 
-	bool m_showItemInfo;
+    bool m_showItemInfo;
+
+    bool m_itemAquired;
 };
 
 }

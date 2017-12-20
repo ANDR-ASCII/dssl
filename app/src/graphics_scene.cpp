@@ -13,9 +13,9 @@ GraphicsScene::GraphicsScene(QObject* parent)
 
 GraphicsScene::GraphicsScene(const QRectF& sceneRect, QObject* parent)
     : QGraphicsScene(sceneRect, parent)
-    , m_aquiredItem(nullptr)
     , m_timeId(0)
     , m_showItemInfo(true)
+    , m_itemAquired(false)
 {
     m_timeId = startTimer(50);
     DEBUG_ASSERT(m_timeId);
@@ -40,24 +40,12 @@ void GraphicsScene::setShowItemInfo(bool value)
     emit showItemInfoChanged(m_showItemInfo);
 }
 
-void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
-{
-    if (m_aquiredItem)
-    {
-        m_aquiredItem->setX(event->scenePos().x());
-        m_aquiredItem->setY(event->scenePos().y());
-
-        return;
-    }
-
-    QGraphicsScene::mouseMoveEvent(event);
-}
 
 void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (m_aquiredItem = itemAt(event->scenePos(), QTransform()); m_aquiredItem)
+    if (QGraphicsItem* existingItem = itemAt(event->scenePos(), QTransform()); existingItem)
     {
-        return;
+        m_itemAquired = true;
     }
 
     QGraphicsScene::mousePressEvent(event);
@@ -65,11 +53,11 @@ void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (m_aquiredItem)
+    if (m_itemAquired)
     {
-        m_aquiredItem = nullptr;
+        m_itemAquired = false;
 
-        return;
+        return QGraphicsScene::mouseReleaseEvent(event);
     }
 
     const QPointF centerPosition = event->scenePos();
@@ -81,6 +69,8 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     if (QGraphicsItem* existingItem = itemAt(centerPosition, QTransform()); existingItem)
     {
         removeItem(existingItem);
+
+        event->accept();
 
         return;
     }
@@ -94,7 +84,7 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
         itemAt(rightRadiusPosition, QTransform()) ||
         itemAt(bottomRadiusPosition, QTransform()))
     {
-        return;
+        return QGraphicsScene::mouseReleaseEvent(event);
     }
 
     const QPointF itemPosition(
@@ -102,18 +92,25 @@ void GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
         event->scenePos().y() - Calculation::CircleData::radius() / 2
     );
 
-    GraphicsCircleItem* item = new GraphicsCircleItem(itemPosition);
+    addCircle(itemPosition);
+
+    event->accept();
+}
+
+void GraphicsScene::timerEvent(QTimerEvent* event)
+{
+    advance();
+}
+
+void GraphicsScene::addCircle(const QPointF& position)
+{
+    GraphicsCircleItem* item = new GraphicsCircleItem(position);
 
     item->setShowDetailedInfo(showItemInfo());
 
     VERIFY(connect(this, SIGNAL(showItemInfoChanged(bool)), item, SLOT(setShowDetailedInfo(bool))));
 
     addItem(item);
-}
-
-void GraphicsScene::timerEvent(QTimerEvent* event)
-{
-    advance();
 }
 
 }

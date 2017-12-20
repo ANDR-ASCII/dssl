@@ -12,6 +12,7 @@ GraphicsCircleItem::GraphicsCircleItem(const QPointF& position, QGraphicsItem* p
     , m_color(Helpers::randomColor())
     , m_borderColor(Helpers::randomColor())
     , m_showDetailedInfo(true)
+    , m_isMoving(false)
 {
     setPos(position);
 
@@ -82,6 +83,53 @@ void GraphicsCircleItem::paint(QPainter* painter, const QStyleOptionGraphicsItem
         .arg(m_dataMapper->associatedData()->velocityByX())
         .arg(m_dataMapper->associatedData()->velocityByY())
     );
+}
+
+void GraphicsCircleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    if (m_isMoving)
+    {
+        setPositionInternal(event->scenePos());
+
+        event->accept();
+
+        return;
+    }
+
+    QGraphicsItem::mouseMoveEvent(event);
+}
+
+void GraphicsCircleItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    setCursor(QCursor(Qt::ClosedHandCursor));
+
+    m_isMoving = true;
+
+    m_dataMapper->associatedData()->setCalculationBlocked(true);
+
+    setPositionInternal(event->scenePos());
+
+    event->accept();
+}
+
+void GraphicsCircleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    setCursor(QCursor(Qt::ArrowCursor));
+
+    m_isMoving = false;
+
+    m_dataMapper->associatedData()->setCalculationBlocked(false);
+
+    event->accept();
+}
+
+void GraphicsCircleItem::setPositionInternal(const QPointF& position)
+{
+    setPos(position);
+
+    m_dataMapper->associatedData()->setX(position.x());
+
+    m_dataMapper->associatedData()->setY(position.y());
 }
 
 }

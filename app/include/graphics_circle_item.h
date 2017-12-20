@@ -36,6 +36,15 @@ public:
 protected:
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+
+private:
+    void setPositionInternal(const QPointF& position);
+
 private:
     std::shared_ptr<CoordinateCircleMapper> m_dataMapper;
 
@@ -44,6 +53,8 @@ private:
     QColor m_borderColor;
 
     bool m_showDetailedInfo;
+
+    bool m_isMoving;
 };
 
 }

@@ -53,6 +53,11 @@ void ObjectPlacementCalculator::calculateLoop()
     {
         for (std::unique_ptr<CircleData>& object : m_objects)
         {
+            if (object->isCalculationBlocked())
+            {
+                continue;
+            }
+
             Point objectCoords{ static_cast<double>(object->x()), static_cast<double>(object->y()) };
 
             double accelerationByX = 0.0;
@@ -60,6 +65,11 @@ void ObjectPlacementCalculator::calculateLoop()
 
             for (std::unique_ptr<CircleData>& object : m_objects)
             {
+                if (object->isCalculationBlocked())
+                {
+                    continue;
+                }
+
                 Point relativeObjectCoords{ static_cast<double>(object->x()), static_cast<double>(object->y()) };
 
                 const double distanceValue = distance(relativeObjectCoords, objectCoords);
