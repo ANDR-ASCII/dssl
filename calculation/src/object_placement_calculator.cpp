@@ -35,7 +35,7 @@ CircleData* ObjectPlacementCalculator::addNewObject(int x, int y)
 {
     std::lock_guard<std::mutex> locker(m_mutex);
 
-    m_objects.emplace_back(new CircleData(x, y));
+    m_objects.push_back(std::make_unique<CircleData>(x, y));
 
     return m_objects.back().get();
 }
@@ -54,7 +54,7 @@ void ObjectPlacementCalculator::calculateLoop()
         //
         // std::lock_guard here will lead to livelock if we add the circle
         //
-        while(!m_mutex.try_lock());
+        while (!m_mutex.try_lock());
 
         for (std::unique_ptr<CircleData>& object : m_objects)
         {
@@ -108,6 +108,11 @@ void ObjectPlacementCalculator::start() noexcept
 
     m_needToCalculate.store(true);
 
+    if (m_calculateThread.joinable())
+    {
+        throw std::runtime_error("First need to join current thread before starting the new thread! Otherwise well be called std::terminate");
+    }
+
     m_calculateThread = std::thread(&ObjectPlacementCalculator::calculateLoop, this);
 }
 
@@ -115,17 +120,17 @@ void ObjectPlacementCalculator::stop() noexcept
 {
     m_needToCalculate.store(false);
 
+    wait();
+}
+
+void ObjectPlacementCalculator::wait() noexcept
+{
     if (!m_calculateThread.joinable())
     {
         return;
     }
 
     m_calculateThread.join();
-}
-
-bool ObjectPlacementCalculator::isRunning() const noexcept
-{
-    return m_needToCalculate.load() && m_calculateThread.get_id() != std::thread::id();
 }
 
 bool ObjectPlacementCalculator::canContinueCalculate() noexcept
@@ -151,6 +156,13 @@ void ObjectPlacementCalculator::removeObject(CircleData* object)
         [object](const auto& existingObject) { return existingObject.get() == object; });
 
     m_objects.erase(newContainerEnd, std::end(m_objects));
+}
+
+void ObjectPlacementCalculator::removeObjects()
+{
+    std::lock_guard<std::mutex> locker(m_mutex);
+
+    m_objects.clear();
 }
 
 }

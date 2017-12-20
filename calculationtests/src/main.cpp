@@ -4,6 +4,11 @@
 using namespace Calculation;
 using namespace CalculationTests;
 
+void myTerminateHandler()
+{
+    std::cout << "This is actually terminate handler\n";
+}
+
 TEST(CalculationTests, RepeatnessTest)
 {
     using namespace std::literals::chrono_literals;
@@ -21,10 +26,7 @@ TEST(CalculationTests, RepeatnessTest)
 
         objectPlacementCalculator.start();
 
-        while (objectPlacementCalculator.isRunning())
-        {
-            std::this_thread::sleep_for(10ms);
-        }
+        objectPlacementCalculator.wait();
 
         std::vector<CircleData> result;
 
@@ -33,10 +35,7 @@ TEST(CalculationTests, RepeatnessTest)
             result.push_back(*circleData[i]);
         }
 
-        std::for_each(circleData.begin(), circleData.end(), [&objectPlacementCalculator](CircleData* data) 
-        { 
-            objectPlacementCalculator.removeObject(data); 
-        });
+        objectPlacementCalculator.removeObjects();
 
         return result;
     };
@@ -49,6 +48,8 @@ TEST(CalculationTests, RepeatnessTest)
 
 int main(int argc, char* argv[])
 {
+    std::set_terminate(myTerminateHandler);
+
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

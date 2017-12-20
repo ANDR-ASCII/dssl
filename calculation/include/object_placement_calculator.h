@@ -10,17 +10,19 @@ class ObjectPlacementCalculator
 public:
     static ObjectPlacementCalculator& instance();
 
-    ~ObjectPlacementCalculator();
+    virtual ~ObjectPlacementCalculator();
 
     CircleData* addNewObject(int x, int y);
 
     void removeObject(CircleData* object);
 
+    void removeObjects();
+
     void start() noexcept;
 
     void stop() noexcept;
 
-    bool isRunning() const noexcept;
+    void wait() noexcept;
 
 protected:
     ObjectPlacementCalculator();

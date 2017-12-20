@@ -26,6 +26,8 @@
 #include <optional>
 #include <csignal>
 
+#include <windows.h>
+
 // google tests
 #include <gtest/gtest.h>
 
