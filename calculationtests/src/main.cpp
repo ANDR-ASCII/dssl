@@ -3,15 +3,14 @@
 
 using namespace Calculation;
 using namespace CalculationTests;
-
-void myTerminateHandler()
-{
-    std::cout << "This is actually terminate handler\n";
-}
+using namespace std::literals::chrono_literals;
 
 TEST(CalculationTests, RepeatnessTest)
 {
-    using namespace std::literals::chrono_literals;
+    //
+    // All calculation results must be the same with the
+    // the same source data and the same iterations
+    //
 
     TestObjectPlacementCalculator objectPlacementCalculator(100);
 
@@ -48,8 +47,6 @@ TEST(CalculationTests, RepeatnessTest)
 
 int main(int argc, char* argv[])
 {
-    std::set_terminate(myTerminateHandler);
-
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
