@@ -40,31 +40,28 @@ void GraphicsScene::setShowItemInfo(bool value)
     emit showItemInfoChanged(m_showItemInfo);
 }
 
-
 void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsItem* existingItem = itemAt(event->scenePos(), QTransform());
 
-    if (event->button() == Qt::RightButton)
+    if (event->button() != Qt::RightButton)
     {
-        if (existingItem)
-        {
-            removeItem(existingItem);
-        }
-        else
-        {
-            const QPointF itemPosition(
-                event->scenePos().x() - Calculation::CircleData::radius() / 2,
-                event->scenePos().y() - Calculation::CircleData::radius() / 2
-            );
-
-            addCircle(itemPosition);
-        }
-
-        return;
+        return QGraphicsScene::mousePressEvent(event);
     }
 
-    QGraphicsScene::mousePressEvent(event);
+    if (existingItem)
+    {
+        removeItem(existingItem);
+    }
+    else
+    {
+        const QPointF itemPosition(
+            event->scenePos().x() - Calculation::CircleData::radius() / 2,
+            event->scenePos().y() - Calculation::CircleData::radius() / 2
+        );
+
+        addCircle(itemPosition);
+    }
 }
 
 void GraphicsScene::timerEvent(QTimerEvent* event)
