@@ -21,25 +21,6 @@ struct Point
     }
 };
 
-template <typename T>
-class SpinLockGuard final
-{
-public:
-    SpinLockGuard(T& ref)
-        : m_ref(ref)
-    {
-        while (!m_ref.try_lock());
-    }
-
-    ~SpinLockGuard()
-    {
-        m_ref.unlock();
-    }
-
-private:
-    T& m_ref;
-};
-
 }
 
 namespace Calculation
