@@ -24,12 +24,12 @@ void AbstractCompoundObservable::detachObserver(const std::shared_ptr<IObserver>
 
 void AbstractCompoundObservable::notifyObjectChanged()
 {
-//     auto loopBody = [](const std::shared_ptr<IObserver>& observer) 
-//     {
-//         observer->onAboutNotifyObjectChanged();
-//     };
-// 
-//     std::for_each(m_observers.begin(), m_observers.end(), loopBody);
+    auto loopBody = [](const std::shared_ptr<IObserver>& observer) 
+    {
+        observer->onAboutNotifyObjectChanged();
+    };
+
+    std::for_each(m_observers.begin(), m_observers.end(), loopBody);
 }
 
 }
