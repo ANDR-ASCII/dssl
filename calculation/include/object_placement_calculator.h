@@ -18,7 +18,7 @@ public:
 
     void removeObjects();
 
-    void start() noexcept;
+    void start();
 
     void stop() noexcept;
 

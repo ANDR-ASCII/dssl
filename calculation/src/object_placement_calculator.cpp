@@ -93,13 +93,13 @@ void ObjectPlacementCalculator::calculateLoop()
 
         m_mutex.unlock();
 
-        std::this_thread::sleep_for(50ms);
+        std::this_thread::sleep_for(30ms);
     }
 
     m_needToCalculate.store(false);
 }
 
-void ObjectPlacementCalculator::start() noexcept
+void ObjectPlacementCalculator::start()
 {
     if (m_needToCalculate.load())
     {
